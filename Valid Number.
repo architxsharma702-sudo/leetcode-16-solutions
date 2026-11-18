@@ -1,0 +1,48 @@
+class Solution {
+    public boolean isNumber(String s) {
+        if (s == null || s.length() == 0) {
+            return false;
+        }
+
+        boolean seenDigit = false;
+        boolean seenExponent = false;
+        boolean seenDot = false;
+        int countSign = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (Character.isDigit(c)) {
+                seenDigit = true;
+            } else if (c == '+' || c == '-') {
+                countSign++;
+                if (countSign > 2) {
+                    return false;
+                }
+                if (i > 0 && s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E') {
+                    return false;
+                }
+                if (i == s.length() - 1) {
+                    return false;
+                }
+            } else if (c == '.') {
+                if (seenDot || seenExponent) {
+                    return false;
+                }
+                if (i == s.length() - 1 && !seenDigit) {
+                    return false;
+                }
+                seenDot = true;
+            } else if (c == 'e' || c == 'E') {
+                if (seenExponent || !seenDigit || i == s.length() - 1) {
+                    return false;
+                }
+                seenExponent = true;
+            } else {
+                return false;
+            }
+        }
+
+        return seenDigit;
+    }
+}
